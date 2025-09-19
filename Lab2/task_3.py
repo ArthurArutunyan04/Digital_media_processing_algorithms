@@ -15,6 +15,8 @@ cv2.createTrackbar('V_min', 'Trackbars', 58, 255, empty)
 cv2.createTrackbar('V_max', 'Trackbars', 255, 255, empty)
 
 cv2.namedWindow('Result')
+cv2.namedWindow('Opening')
+cv2.namedWindow('Closing')
 
 while True:
     ret, frame = cap.read()
@@ -36,11 +38,19 @@ while True:
 
     mask = cv2.inRange(hsv, lower_red, upper_red)
 
+    kernel = np.ones((5, 5), np.uint8)
+    opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+
     result = cv2.bitwise_and(frame, frame, mask=mask)
 
-    result = cv2.resize(result, (600, 300))
+    result = cv2.resize(result, (350, 300))
+    opening = cv2.resize(opening, (350, 300))
+    closing = cv2.resize(closing, (350, 300))
 
     cv2.imshow('Result', result)
+    cv2.imshow('Opening', opening)
+    cv2.imshow('Closing', closing)
 
     if cv2.waitKey(1) & 0xFF == 27:
         break
