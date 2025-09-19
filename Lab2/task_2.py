@@ -19,7 +19,6 @@ cv2.namedWindow('Result')
 while True:
     ret, frame = cap.read()
     if not ret:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
         continue
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
